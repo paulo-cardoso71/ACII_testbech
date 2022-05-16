@@ -39,7 +39,6 @@ A <= X"FFFF0000"; B <= X"FF00FF00"; opcode <= "0001"; wait for 100 ns;
 A <= X"FFFF0000"; B <= X"0000FFFF"; opcode <= "0001"; wait for 100 ns;
 
 
--- zero
 A <= X"00000000"; B <= X"00000000"; opcode <= "0010"; wait for 100 ns;
 
 
@@ -74,7 +73,6 @@ A <= X"0000000A"; B <= X"00000006"; opcode <= "0100"; wait for 100 ns;
 
 
 A <= X"80000000"; B <= X"00000001"; opcode <= "0100"; wait for 100 ns;
--- sub = 0x7FFFFFFF, ovfl = 1, borrow = 0
 
 
 A <= X"7FFFFFFF"; B <= X"FFFFFFFF"; opcode <= "0100"; wait for 100 ns;
@@ -83,7 +81,6 @@ A <= X"7FFFFFFF"; B <= X"FFFFFFFF"; opcode <= "0100"; wait for 100 ns;
 
 
 A <= X"FFFFFFFF"; B <= X"FFFFFFFF"; opcode <= "0101"; wait for 100 ns;
--- add = Z => 0x0, zero = 1
 
 
 A <= X"00000000"; B <= X"00000001"; opcode <= "0101"; wait for 100 ns;
