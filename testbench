@@ -1,0 +1,133 @@
+--Arquivo do testbech guys, tô saindo pro trampo agr, pedi pra chegar mais tarde pra fazer isso, n deu tempo de comentar, mas acho que tá tudo certinho, qlqr coisa qnd eu chegar eu comento tudo ou explico pra vcs, mas tá bem de boa, fiz tudo separadinho. tmj, qlqr coisa pergunta
+--se quiserem posso tentar fazer a ula tbm, mas isso aí é só terça kkkk, preciso dormir 
+
+LIBRARY ieee;
+USE  ieee.std_logic_1164.all;
+
+ENTITY ULA_OAC_vhd_tst IS END ULA_OAC_vhd_tst;
+
+ARCHITECTURE ULA_OAC_arch OF ULA_OAC_vhd_tst IS
+
+SIGNAL A : STD_LOGIC_VECTOR(31 DOWNTO 0); SIGNAL B : STD_LOGIC_VECTOR(31 DOWNTO 0); SIGNAL opcode : STD_LOGIC_VECTOR(3 DOWNTO 0); SIGNAL ovfl : STD_LOGIC;
+SIGNAL vai : STD_LOGIC;
+SIGNAL Z : STD_LOGIC_VECTOR(31 DOWNTO 0); SIGNAL zero : STD_LOGIC;
+
+COMPONENT ULA_OAC
+PORT (
+A : IN STD_LOGIC_VECTOR(31 DOWNTO 0); B : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+opcode : IN STD_LOGIC_VECTOR(3 DOWNTO 0); ovfl : OUT STD_LOGIC;
+vai : OUT STD_LOGIC;
+Z : OUT STD_LOGIC_VECTOR(31 DOWNTO 0); zero : OUT STD_LOGIC
+);
+END COMPONENT;
+ 
+BEGIN
+i1 : ULA_OAC PORT MAP (
+A => A, B => B,
+opcode => opcode, ovfl => ovfl,
+vai => vai, Z => Z,
+zero => zero
+);
+
+init : PROCESS
+BEGIN
+
+A <= X"FFFF0000"; B <= X"FF00FF00"; opcode <= "0000"; wait for 100 ns;
+A <= X"FFFF0000"; B <= X"0000FFFF"; opcode <= "0000"; wait for 100 ns;
+
+A <= X"FFFF0000"; B <= X"FF00FF00"; opcode <= "0001"; wait for 100 ns;
+A <= X"FFFF0000"; B <= X"0000FFFF"; opcode <= "0001"; wait for 100 ns;
+
+
+-- zero
+A <= X"00000000"; B <= X"00000000"; opcode <= "0010"; wait for 100 ns;
+
+
+A <= X"FFFFFFFF"; B <= X"FFFFFFFF"; opcode <= "0010"; wait for 100 ns;
+
+A <= X"0000FFFF"; B <= X"0000FFFF"; opcode <= "0010"; wait for 100 ns;
+
+A <= X"7FFFFFFF"; B <= X"7FFFFFFF"; opcode <= "0010"; wait for 100 ns;
+
+A <= X"80000000"; B <= X"80000000"; opcode <= "0010"; wait for 100 ns;
+
+A <= X"00000000"; B <= X"00000000"; opcode <= "0011"; wait for 100 ns;
+ 
+
+A <= X"FFFFFFFF"; B <= X"FFFFFFFF"; opcode <= "0011"; wait for 100 ns;
+
+A <= X"0000FFFF"; B <= X"0000FFFF"; opcode <= "0011"; wait for 100 ns;
+
+A <= X"7FFFFFFF"; B <= X"7FFFFFFF"; opcode <= "0011"; wait for 100 ns;
+
+A <= X"80000000"; B <= X"80000000"; opcode <= "0011"; wait for 100 ns;
+
+A <= X"FFFFFFFF"; B <= X"FFFFFFFF"; opcode <= "0100"; wait for 100 ns;
+
+
+A <= X"00000000"; B <= X"00000001"; opcode <= "0100"; wait for 100 ns;
+
+
+
+A <= X"0000000A"; B <= X"00000006"; opcode <= "0100"; wait for 100 ns;
+
+
+
+A <= X"80000000"; B <= X"00000001"; opcode <= "0100"; wait for 100 ns;
+-- sub = 0x7FFFFFFF, ovfl = 1, borrow = 0
+
+
+A <= X"7FFFFFFF"; B <= X"FFFFFFFF"; opcode <= "0100"; wait for 100 ns;
+
+
+
+
+A <= X"FFFFFFFF"; B <= X"FFFFFFFF"; opcode <= "0101"; wait for 100 ns;
+-- add = Z => 0x0, zero = 1
+
+
+A <= X"00000000"; B <= X"00000001"; opcode <= "0101"; wait for 100 ns;
+A <= X"0000000A"; B <= X"00000006"; opcode <= "0101"; wait for 100 ns;
+A <= X"80000000"; B <= X"00000001"; opcode <= "0101"; wait for 100 ns;
+A <= X"7FFFFFFF"; B <= X"FFFFFFFF"; opcode <= "0101"; wait for 100 ns;
+A <= X"0000000A"; B <= X"0000000F"; opcode <= "0110"; wait for 100 ns;
+A <= X"0000000A"; B <= X"00000006"; opcode <= "0110"; wait for 100 ns;
+A <= X"000000FF"; B <= X"000000FF"; opcode <= "0111"; wait for 100 ns;
+A <= X"FF0000FF"; B <= X"FF0000FF"; opcode <= "0111"; wait for 100 ns;
+
+
+
+A <= X"00000000"; B <= X"00000000"; opcode <= "1000"; wait for 100 ns;
+
+A <= X"0000FFFF"; B <= X"FF00FF00"; opcode <= "1000"; wait for 100 ns;
+
+A <= X"00000000"; B <= X"00000001"; opcode <= "1001"; wait for 100 ns;
+
+A <= X"00000010"; B <= X"00000001"; opcode <= "1001"; wait for 100 ns;
+A <= X"00000010"; B <= X"FFFFFFFF"; opcode <= "1010"; wait for 100 ns;
+A <= X"00000100"; B <= X"FFFFFFFF"; opcode <= "1010"; wait for 100 ns;
+
+
+
+A <= X"00000010"; B <= X"FFFFFFFF"; opcode <= "1011"; wait for 100 ns;
+
+A <= X"00000001"; B <= X"FFFFFFFF"; opcode <= "1011"; wait for 100 ns;
+
+
+
+A <= X"00000010"; B <= X"FFFFFFFF"; opcode <= "1100"; wait for 100 ns;
+
+A <= X"00000010"; B <= X"FF0000FF"; opcode <= "1100"; wait for 100 ns;
+
+
+WAIT;
+END PROCESS init;
+
+always : PROCESS
+ 
+
+
+BEGIN
+
+WAIT;
+END PROCESS always; END ULA_OAC_arch;
